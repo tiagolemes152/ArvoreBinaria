@@ -1,22 +1,50 @@
 // BinarySearchTree.java
-public class BinarySearchTree<T extends Comparable<T>> {
+
+public class AVLTree<T extends Comparable<T>> {
+
     private Node<T> raiz;
 
-    public BinarySearchTree(){
+    public AVLTree() {
         this.raiz = null;
+    }
+
+    public int altura() {
+        return altura(this.raiz);
+    }
+
+    private int altura(Node<T> raiz) {
+        int altEsq, altDir;
+
+        if (raiz == null) {
+            return -1;
+        }
+
+        altEsq = altura(raiz.esquerda);
+        altDir = altura(raiz.direita);
+
+        if (altDir > altEsq) {
+            return altDir + 1;
+        } else {
+            return altEsq + 1;
+        }
     }
 
     private Node<T> add(Node<T> raiz, Node<T> novoNo) {
         if (raiz == null) {
             raiz = novoNo;
             return raiz;
-        } else if (novoNo.dado.compareTo(raiz.dado) < 0)
+        } else if (novoNo.dado.compareTo(raiz.dado) < 0) {
             raiz.esquerda = add(raiz.esquerda, novoNo);
-        else
+        } else {
             raiz.direita = add(raiz.direita, novoNo);
+        }
+
+        raiz.fb = altura(raiz.direita) - altura(raiz.esquerda);
+        System.out.println("Altura do no " + raiz.dado + ": " + altura(raiz));
 
         return raiz;
-    }// fim funcao inserir
+    }
+// fim funcao inserir
 
     public void add(T dado) {
         Node<T> novoNo = new Node<>(dado);
@@ -24,27 +52,26 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private void preOrder(Node<T> raiz) {
-       if (raiz != null) {
-            System.out.println(raiz.dado);
+        if (raiz != null) {
+            System.out.print(raiz.dado + "(fb:" + raiz.fb + ") ");
             preOrder(raiz.esquerda);
             preOrder(raiz.direita);
         }
-    }   
-      public void preOrder() {
+    }
+
+    public void preOrder() {
         preOrder(this.raiz);
         System.out.println();
     }
 
-
-
-       private void inOrder(Node<T> raiz) {
+    private void inOrder(Node<T> raiz) {
         if (raiz != null) {
             inOrder(raiz.esquerda);
             System.out.println(raiz.dado);
             inOrder(raiz.direita);
         }
     }
-       
+
     public void inOrder() {
         inOrder(this.raiz);
         System.out.println();
@@ -54,37 +81,39 @@ public class BinarySearchTree<T extends Comparable<T>> {
         if (raiz != null) {
             postOrder(raiz.esquerda);
             postOrder(raiz.direita);
-           System.out.println(raiz.dado);
+            System.out.println(raiz.dado);
         }
     }
+
     public void postOrder() {
         postOrder(this.raiz);
         System.out.println();
     }
-     public T buscar(T dadoBusca) {
+
+    public T buscar(T dadoBusca) {
         return (T) buscar(this.raiz, dadoBusca);
     }
-     private T buscar(Node<T> raiz, T dadoBusca) {
-        if (raiz == null)
+
+    private T buscar(Node<T> raiz, T dadoBusca) {
+        if (raiz == null) {
             return null; // Dado não encontrado na árvore
-
+        }
         System.out.println("Comparando " + dadoBusca + " com " + raiz.dado);
-        if (raiz.dado.equals(dadoBusca))
+        if (raiz.dado.equals(dadoBusca)) {
             return raiz.dado; // Dado encontrado
-
-        if (dadoBusca.compareTo(raiz.dado) < 0)
+        }
+        if (dadoBusca.compareTo(raiz.dado) < 0) {
             return buscar(raiz.esquerda, dadoBusca);
-        else
+        } else {
             return buscar(raiz.direita, dadoBusca);
+        }
     }
 
-
-
-     // Remove o nó raiz passado por parâmetro e retorna a nova raiz da subárvore
+    // Remove o nó raiz passado por parâmetro e retorna a nova raiz da subárvore
     private Node<T> removeNode(Node<T> raiz) {
         Node<T> nova, pai;
         // Caso 1 e Caso 2 (nó sem filho direito: retorna o filho esquerdo ou null)
-        if (raiz.direita== null) {
+        if (raiz.direita == null) {
             nova = raiz.esquerda;
             return nova;
         }
@@ -119,14 +148,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
             System.out.println("Encontrado - removendo");
             return removeNode(raiz);
         }
-        if (dadoRemover.compareTo(raiz.dado) < 0)
+        if (dadoRemover.compareTo(raiz.dado) < 0) {
             raiz.esquerda = remove(raiz.esquerda, dadoRemover);
-        else
+        } else {
             raiz.direita = remove(raiz.direita, dadoRemover);
+        }
 
         return raiz;
     } // fim buscaRemove
 
-
-   
 }

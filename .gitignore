@@ -1,3 +1,17 @@
-.idea/
-*.iml
+# Arquivos compilados Java
+*.class
+
+# Pastas de compilação
+bin/
+build/
 out/
+target/
+
+# Configurações de IDE
+.idea/
+.vscode/
+*.iml
+
+# Arquivos temporários
+*.log
+*.tmp
